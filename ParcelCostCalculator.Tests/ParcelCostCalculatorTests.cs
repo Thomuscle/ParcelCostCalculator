@@ -47,4 +47,16 @@ public class ParcelCostCalculatorTests
         Assert.Equal(1, result.Parcels.Count(p => p.Type == ParcelType.Large));
         Assert.Equal(1, result.Parcels.Count(p => p.Type == ParcelType.XL));
     }
+
+    [Fact]
+    public void CalculateOrderCost_EmptyList_ReturnsEmptySummary()
+    {
+        var parcels = new List<IParcel>();
+
+        var result = CostCalculator.CalculateOrderCost(parcels);
+
+        Assert.NotNull(result);
+        Assert.Empty(result.Parcels);
+        Assert.Equal(0, result.TotalCost);
+    }
 }
