@@ -20,7 +20,7 @@ public static class CostCalculatorUtilities
             return new PricedParcel
             {
                 ParcelDetails = parcel,
-                Type = ParcelType.Small,
+                Type = ItemType.SmallParcel,
                 Cost = 3,
             };
         }
@@ -33,7 +33,7 @@ public static class CostCalculatorUtilities
             return new PricedParcel
             {
                 ParcelDetails = parcel,
-                Type = ParcelType.Medium,
+                Type = ItemType.MediumParcel,
                 Cost = 8,
             };
         }
@@ -46,15 +46,32 @@ public static class CostCalculatorUtilities
             return new PricedParcel
             {
                 ParcelDetails = parcel,
-                Type = ParcelType.Large,
+                Type = ItemType.LargeParcel,
                 Cost = 15,
             };
         }
         return new PricedParcel
         {
             ParcelDetails = parcel,
-            Type = ParcelType.XL,
+            Type = ItemType.XLParcel,
             Cost = 25,
         };
+    }
+
+    public static decimal ApplySpeedyShipping(List<PricedParcel> pricedParcels, decimal totalCost)
+    {
+        // Speedy shipping equals the total cost of all parcels
+        var speedyShippingCost = totalCost;
+
+        pricedParcels.Add(
+            new PricedParcel
+            {
+                ParcelDetails = null,
+                Type = ItemType.SpeedyShipping,
+                Cost = speedyShippingCost,
+            }
+        );
+
+        return totalCost + speedyShippingCost;
     }
 }

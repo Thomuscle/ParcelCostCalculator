@@ -42,10 +42,10 @@ public class ParcelCostCalculatorTests
         Assert.NotNull(result);
         Assert.Equal(4, result.Parcels.Count);
         Assert.Equal(51, result.TotalCost);
-        Assert.Equal(1, result.Parcels.Count(p => p.Type == ParcelType.Small));
-        Assert.Equal(1, result.Parcels.Count(p => p.Type == ParcelType.Medium));
-        Assert.Equal(1, result.Parcels.Count(p => p.Type == ParcelType.Large));
-        Assert.Equal(1, result.Parcels.Count(p => p.Type == ParcelType.XL));
+        Assert.Equal(1, result.Parcels.Count(p => p.Type == ItemType.SmallParcel));
+        Assert.Equal(1, result.Parcels.Count(p => p.Type == ItemType.MediumParcel));
+        Assert.Equal(1, result.Parcels.Count(p => p.Type == ItemType.LargeParcel));
+        Assert.Equal(1, result.Parcels.Count(p => p.Type == ItemType.XLParcel));
     }
 
     [Fact]

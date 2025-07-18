@@ -11,7 +11,10 @@ public class CostCalculator
     /// Each parcel is evaluated for its type and cost based on its dimensions.
     /// Parcel dimensions should be specified in centimeters (cm).
     /// </summary>
-    public static OrderSummary CalculateOrderCost(IEnumerable<IParcel> parcels)
+    public static OrderSummary CalculateOrderCost(
+        IEnumerable<IParcel> parcels,
+        bool useSpeedyShipping = false
+    )
     {
         var pricedParcelList = parcels
             .Select(parcel =>
@@ -26,10 +29,15 @@ public class CostCalculator
             })
             .ToList();
 
-        return new OrderSummary
+        var totalCost = pricedParcelList.Sum(p => p.Cost);
+
+        if (useSpeedyShipping)
         {
-            Parcels = pricedParcelList,
-            TotalCost = pricedParcelList.Sum(p => p.Cost),
-        };
+            totalCost = CostCalculatorUtilities.ApplySpeedyShipping(pricedParcelList, totalCost);
+        }
+
+        var orderSummary = new OrderSummary { Parcels = pricedParcelList, TotalCost = totalCost };
+
+        return orderSummary;
     }
 }
