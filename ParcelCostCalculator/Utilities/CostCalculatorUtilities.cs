@@ -9,7 +9,7 @@ public static class CostCalculatorUtilities
     private const int MediumParcelThreshold = 50;
     private const int LargeParcelThreshold = 100;
 
-    public static PricedParcel GetDefaultPricedParcel(Parcel parcel)
+    public static PricedItem GetDefaultPricedParcel(Parcel parcel)
     {
         if (
             parcel.Length < SmallParcelThreshold
@@ -17,10 +17,10 @@ public static class CostCalculatorUtilities
             && parcel.Height < SmallParcelThreshold
         )
         {
-            return new PricedParcel
+            return new PricedItem
             {
                 ParcelDetails = parcel,
-                Type = ParcelType.Small,
+                Type = ItemType.SmallParcel,
                 Cost = 3,
             };
         }
@@ -30,10 +30,10 @@ public static class CostCalculatorUtilities
             && parcel.Height < MediumParcelThreshold
         )
         {
-            return new PricedParcel
+            return new PricedItem
             {
                 ParcelDetails = parcel,
-                Type = ParcelType.Medium,
+                Type = ItemType.MediumParcel,
                 Cost = 8,
             };
         }
@@ -43,18 +43,35 @@ public static class CostCalculatorUtilities
             && parcel.Height < LargeParcelThreshold
         )
         {
-            return new PricedParcel
+            return new PricedItem
             {
                 ParcelDetails = parcel,
-                Type = ParcelType.Large,
+                Type = ItemType.LargeParcel,
                 Cost = 15,
             };
         }
-        return new PricedParcel
+        return new PricedItem
         {
             ParcelDetails = parcel,
-            Type = ParcelType.XL,
+            Type = ItemType.XLParcel,
             Cost = 25,
         };
+    }
+
+    public static void ApplySpeedyShipping(OrderSummary orderSummary)
+    {
+        // Speedy shipping equals the total cost of all parcels
+        var speedyShippingCost = orderSummary.TotalCost;
+
+        orderSummary.Items.Add(
+            new PricedItem
+            {
+                ParcelDetails = null,
+                Type = ItemType.SpeedyShipping,
+                Cost = speedyShippingCost,
+            }
+        );
+
+        orderSummary.TotalCost += speedyShippingCost;
     }
 }

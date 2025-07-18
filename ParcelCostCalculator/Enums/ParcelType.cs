@@ -1,9 +1,11 @@
 namespace ParcelCostCalculator.Enums;
 
-public enum ParcelType
+public enum ItemType
 {
-    Small,
-    Medium,
-    Large,
-    XL,
+    SmallParcel,
+    MediumParcel,
+    LargeParcel,
+    XLParcel,
+
+    SpeedyShipping,
 }

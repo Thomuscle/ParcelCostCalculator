@@ -2,11 +2,11 @@ using ParcelCostCalculator.Enums;
 
 namespace ParcelCostCalculator.Models;
 
-public class PricedParcel
+public class PricedItem
 {
-    public required Parcel ParcelDetails { get; set; }
+    public Parcel? ParcelDetails { get; set; }
 
-    public ParcelType Type { get; set; }
+    public ItemType Type { get; set; }
 
     public decimal Cost { get; set; }
 }

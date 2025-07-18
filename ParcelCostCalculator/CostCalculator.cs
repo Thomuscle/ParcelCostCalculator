@@ -7,17 +7,22 @@ namespace ParcelCostCalculator;
 public class CostCalculator
 {
     /// <summary>
-    /// Calculates the total cost and parcel types for a list of parcels, returning an order summary.
+    /// Calculates the total cost and items for a list of parcels, returning an order summary.
     /// Each parcel is evaluated for its type and cost based on its dimensions.
     /// Parcel dimensions should be specified in centimeters (cm).
+    /// If `useSpeedyShipping` is true, a speedy shipping item is added to the items in the order summary.
+    /// Speedy shipping doubles the cost of the order.
     /// </summary>
-    public static OrderSummary CalculateOrderCost(IEnumerable<IParcel> parcels)
+    public static OrderSummary CalculateOrderCost(
+        IEnumerable<IParcel> parcels,
+        bool useSpeedyShipping = false
+    )
     {
         var pricedParcelList = parcels
             .Select(parcel =>
             {
                 var pricedParcel = CostCalculatorUtilities.GetDefaultPricedParcel((Parcel)parcel);
-                return new PricedParcel
+                return new PricedItem
                 {
                     ParcelDetails = (Parcel)parcel,
                     Type = pricedParcel.Type,
@@ -26,10 +31,15 @@ public class CostCalculator
             })
             .ToList();
 
-        return new OrderSummary
+        var totalCost = pricedParcelList.Sum(p => p.Cost);
+
+        var orderSummary = new OrderSummary { Items = pricedParcelList, TotalCost = totalCost };
+
+        if (useSpeedyShipping)
         {
-            Parcels = pricedParcelList,
-            TotalCost = pricedParcelList.Sum(p => p.Cost),
-        };
+            CostCalculatorUtilities.ApplySpeedyShipping(orderSummary);
+        }
+
+        return orderSummary;
     }
 }
