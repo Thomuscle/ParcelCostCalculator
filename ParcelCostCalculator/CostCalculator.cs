@@ -1,5 +1,6 @@
 ﻿using ParcelCostCalculator.Interfaces;
 using ParcelCostCalculator.Models;
+using ParcelCostCalculator.Utilities;
 
 namespace ParcelCostCalculator;
 
@@ -8,11 +9,15 @@ public class CostCalculator
     public static OrderSummary CalculateOrderCost(IEnumerable<IParcel> parcels)
     {
         var pricedParcelList = parcels
-            .Select(parcel => new PricedParcel
+            .Select(parcel =>
             {
-                ParcelDetails = (Parcel)parcel,
-                Type = Enums.ParcelType.Small, // Placeholder for actual type determination logic
-                Cost = 10, // Placeholder for actual cost calculation logic
+                var pricedParcel = CostCalculatorUtilities.GetDefaultPricedParcel((Parcel)parcel);
+                return new PricedParcel
+                {
+                    ParcelDetails = (Parcel)parcel,
+                    Type = pricedParcel.Type,
+                    Cost = pricedParcel.Cost,
+                };
             })
             .ToList();
 
