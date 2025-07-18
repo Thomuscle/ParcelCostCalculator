@@ -31,12 +31,14 @@ public class CostCalculator
 
         var totalCost = pricedParcelList.Sum(p => p.Cost);
 
+        var orderSummary = new OrderSummary { Parcels = pricedParcelList, TotalCost = totalCost };
+
         if (useSpeedyShipping)
         {
-            totalCost = CostCalculatorUtilities.ApplySpeedyShipping(pricedParcelList, totalCost);
+            CostCalculatorUtilities.ApplySpeedyShipping(orderSummary);
         }
 
-        var orderSummary = new OrderSummary { Parcels = pricedParcelList, TotalCost = totalCost };
+
 
         return orderSummary;
     }

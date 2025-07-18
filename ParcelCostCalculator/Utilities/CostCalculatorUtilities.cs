@@ -58,12 +58,12 @@ public static class CostCalculatorUtilities
         };
     }
 
-    public static decimal ApplySpeedyShipping(List<PricedParcel> pricedParcels, decimal totalCost)
+    public static void ApplySpeedyShipping(OrderSummary orderSummary)
     {
         // Speedy shipping equals the total cost of all parcels
-        var speedyShippingCost = totalCost;
+        var speedyShippingCost = orderSummary.TotalCost;
 
-        pricedParcels.Add(
+        orderSummary.Parcels.Add(
             new PricedParcel
             {
                 ParcelDetails = null,
@@ -72,6 +72,6 @@ public static class CostCalculatorUtilities
             }
         );
 
-        return totalCost + speedyShippingCost;
+        orderSummary.TotalCost += speedyShippingCost;
     }
 }
