@@ -20,7 +20,7 @@ public class CostCalculator
             .Select(parcel =>
             {
                 var pricedParcel = CostCalculatorUtilities.GetDefaultPricedParcel((Parcel)parcel);
-                return new PricedParcel
+                return new PricedItem
                 {
                     ParcelDetails = (Parcel)parcel,
                     Type = pricedParcel.Type,
@@ -31,7 +31,7 @@ public class CostCalculator
 
         var totalCost = pricedParcelList.Sum(p => p.Cost);
 
-        var orderSummary = new OrderSummary { Parcels = pricedParcelList, TotalCost = totalCost };
+        var orderSummary = new OrderSummary { Items = pricedParcelList, TotalCost = totalCost };
 
         if (useSpeedyShipping)
         {

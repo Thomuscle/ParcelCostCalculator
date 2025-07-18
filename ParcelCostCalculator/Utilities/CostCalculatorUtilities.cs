@@ -9,7 +9,7 @@ public static class CostCalculatorUtilities
     private const int MediumParcelThreshold = 50;
     private const int LargeParcelThreshold = 100;
 
-    public static PricedParcel GetDefaultPricedParcel(Parcel parcel)
+    public static PricedItem GetDefaultPricedParcel(Parcel parcel)
     {
         if (
             parcel.Length < SmallParcelThreshold
@@ -17,7 +17,7 @@ public static class CostCalculatorUtilities
             && parcel.Height < SmallParcelThreshold
         )
         {
-            return new PricedParcel
+            return new PricedItem
             {
                 ParcelDetails = parcel,
                 Type = ItemType.SmallParcel,
@@ -30,7 +30,7 @@ public static class CostCalculatorUtilities
             && parcel.Height < MediumParcelThreshold
         )
         {
-            return new PricedParcel
+            return new PricedItem
             {
                 ParcelDetails = parcel,
                 Type = ItemType.MediumParcel,
@@ -43,14 +43,14 @@ public static class CostCalculatorUtilities
             && parcel.Height < LargeParcelThreshold
         )
         {
-            return new PricedParcel
+            return new PricedItem
             {
                 ParcelDetails = parcel,
                 Type = ItemType.LargeParcel,
                 Cost = 15,
             };
         }
-        return new PricedParcel
+        return new PricedItem
         {
             ParcelDetails = parcel,
             Type = ItemType.XLParcel,
@@ -63,8 +63,8 @@ public static class CostCalculatorUtilities
         // Speedy shipping equals the total cost of all parcels
         var speedyShippingCost = orderSummary.TotalCost;
 
-        orderSummary.Parcels.Add(
-            new PricedParcel
+        orderSummary.Items.Add(
+            new PricedItem
             {
                 ParcelDetails = null,
                 Type = ItemType.SpeedyShipping,

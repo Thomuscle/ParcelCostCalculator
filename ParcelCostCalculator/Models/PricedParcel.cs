@@ -2,7 +2,7 @@ using ParcelCostCalculator.Enums;
 
 namespace ParcelCostCalculator.Models;
 
-public class PricedParcel
+public class PricedItem
 {
     public Parcel? ParcelDetails { get; set; }
 
