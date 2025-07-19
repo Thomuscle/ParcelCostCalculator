@@ -5,16 +5,23 @@ namespace ParcelCostCalculator.Utilities;
 
 public static class CostCalculatorUtilities
 {
-    private const int SmallParcelThreshold = 10;
-    private const int MediumParcelThreshold = 50;
-    private const int LargeParcelThreshold = 100;
+    private const int SmallParcelDimensionThreshold = 10;
+    private const int MediumParcelDimensionThreshold = 50;
+    private const int LargeParcelDimensionThreshold = 100;
 
-    public static PricedItem GetDefaultPricedParcel(Parcel parcel)
+    private const int SmallParcelWeightThreshold = 1;
+    private const int MediumParcelWeightThreshold = 3;
+    private const int LargeParcelWeightThreshold = 6;
+    private const int XLParcelWeightThreshold = 10;
+
+    private const int PricePerKgOverweight = 2;
+
+    public static PricedItem GetPricedParcel(Parcel parcel)
     {
         if (
-            parcel.Length < SmallParcelThreshold
-            && parcel.Width < SmallParcelThreshold
-            && parcel.Height < SmallParcelThreshold
+            parcel.Length < SmallParcelDimensionThreshold
+            && parcel.Width < SmallParcelDimensionThreshold
+            && parcel.Height < SmallParcelDimensionThreshold
         )
         {
             return new PricedItem
@@ -25,9 +32,9 @@ public static class CostCalculatorUtilities
             };
         }
         if (
-            parcel.Length < MediumParcelThreshold
-            && parcel.Width < MediumParcelThreshold
-            && parcel.Height < MediumParcelThreshold
+            parcel.Length < MediumParcelDimensionThreshold
+            && parcel.Width < MediumParcelDimensionThreshold
+            && parcel.Height < MediumParcelDimensionThreshold
         )
         {
             return new PricedItem
@@ -38,9 +45,9 @@ public static class CostCalculatorUtilities
             };
         }
         if (
-            parcel.Length < LargeParcelThreshold
-            && parcel.Width < LargeParcelThreshold
-            && parcel.Height < LargeParcelThreshold
+            parcel.Length < LargeParcelDimensionThreshold
+            && parcel.Width < LargeParcelDimensionThreshold
+            && parcel.Height < LargeParcelDimensionThreshold
         )
         {
             return new PricedItem
@@ -56,6 +63,36 @@ public static class CostCalculatorUtilities
             Type = ItemType.XLParcel,
             Cost = 25,
         };
+    }
+
+    public static void ApplyWeightCost(PricedItem pricedItem)
+    {
+        // Ensure the parcel details are not null before accessing properties
+        if (pricedItem.ParcelDetails == null)
+        {
+            return;
+        }
+
+        // Weight should be rounded up to the nearest kilogram
+        var weight = Math.Ceiling(pricedItem.ParcelDetails.Weight);
+        var type = pricedItem.Type;
+
+        if (type == ItemType.SmallParcel && weight > SmallParcelWeightThreshold)
+        {
+            pricedItem.Cost += (weight - SmallParcelWeightThreshold) * PricePerKgOverweight;
+        }
+        else if (type == ItemType.MediumParcel && weight > MediumParcelWeightThreshold)
+        {
+            pricedItem.Cost += (weight - MediumParcelWeightThreshold) * PricePerKgOverweight;
+        }
+        else if (type == ItemType.LargeParcel && weight > LargeParcelWeightThreshold)
+        {
+            pricedItem.Cost += (weight - LargeParcelWeightThreshold) * PricePerKgOverweight;
+        }
+        else if (type == ItemType.XLParcel && weight > XLParcelWeightThreshold)
+        {
+            pricedItem.Cost += (weight - XLParcelWeightThreshold) * PricePerKgOverweight;
+        }
     }
 
     public static void ApplySpeedyShipping(OrderSummary orderSummary)
