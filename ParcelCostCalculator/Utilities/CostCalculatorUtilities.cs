@@ -9,12 +9,20 @@ public static class CostCalculatorUtilities
     private const int MediumParcelDimensionThreshold = 50;
     private const int LargeParcelDimensionThreshold = 100;
 
+    private const int SmallParcelCost = 3;
+    private const int MediumParcelCost = 8;
+    private const int LargeParcelCost = 15;
+    private const int XLParcelCost = 25;
+    private const int HeavyParcelCost = 50;
+
     private const int SmallParcelWeightThreshold = 1;
     private const int MediumParcelWeightThreshold = 3;
     private const int LargeParcelWeightThreshold = 6;
     private const int XLParcelWeightThreshold = 10;
+    private const int HeavyParcelWeightThreshold = 50;
 
     private const int PricePerKgOverweight = 2;
+    private const int PricePerKgOverweightHeavyParcel = 1;
 
     public static PricedItem GetPricedParcel(Parcel parcel)
     {
@@ -28,7 +36,7 @@ public static class CostCalculatorUtilities
             {
                 ParcelDetails = parcel,
                 Type = ItemType.SmallParcel,
-                Cost = 3,
+                Cost = SmallParcelCost,
             };
         }
         if (
@@ -41,7 +49,7 @@ public static class CostCalculatorUtilities
             {
                 ParcelDetails = parcel,
                 Type = ItemType.MediumParcel,
-                Cost = 8,
+                Cost = MediumParcelCost,
             };
         }
         if (
@@ -54,14 +62,14 @@ public static class CostCalculatorUtilities
             {
                 ParcelDetails = parcel,
                 Type = ItemType.LargeParcel,
-                Cost = 15,
+                Cost = LargeParcelCost,
             };
         }
         return new PricedItem
         {
             ParcelDetails = parcel,
             Type = ItemType.XLParcel,
-            Cost = 25,
+            Cost = XLParcelCost,
         };
     }
 
@@ -92,6 +100,19 @@ public static class CostCalculatorUtilities
         else if (type == ItemType.XLParcel && weight > XLParcelWeightThreshold)
         {
             pricedItem.Cost += (weight - XLParcelWeightThreshold) * PricePerKgOverweight;
+        }
+
+        // We can also consider a parcel as a HeavyParcel if this is cheaper
+        var heavyParcelCost =
+            weight <= HeavyParcelWeightThreshold
+                ? HeavyParcelCost
+                : HeavyParcelCost
+                    + ((weight - HeavyParcelWeightThreshold) * PricePerKgOverweightHeavyParcel);
+
+        if (pricedItem.Cost > heavyParcelCost)
+        {
+            pricedItem.Type = ItemType.HeavyParcel;
+            pricedItem.Cost = heavyParcelCost;
         }
     }
 
