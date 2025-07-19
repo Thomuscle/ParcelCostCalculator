@@ -159,7 +159,7 @@ public class ParcelCostCalculatorTests
         Assert.Equal(1, result.Items.Count(p => p.Type == ItemType.SpeedyShipping));
     }
 
-        [Fact]
+    [Fact]
     public void CalculateOrderCost_WithSpeedyShipping_OverweightParcels_ReturnsCorrectSummary()
     {
         var parcels = new List<IParcel>
