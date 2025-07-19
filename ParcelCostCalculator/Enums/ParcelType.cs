@@ -6,6 +6,7 @@ public enum ItemType
     MediumParcel,
     LargeParcel,
     XLParcel,
+    HeavyParcel,
 
     SpeedyShipping,
 }

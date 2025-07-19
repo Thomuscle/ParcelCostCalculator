@@ -101,6 +101,47 @@ public class ParcelCostCalculatorTests
     }
 
     [Fact]
+    public void CalculateOrderCost_HeavyParcels_ReturnsCorrectSummary()
+    {
+        var parcels = new List<IParcel>
+        {
+            new Parcel
+            {
+                Length = 120,
+                Width = 40,
+                Height = 10,
+                Weight = 22, // Not cheaper as heavy - Total cost for this parcel will be 25 + 24 = 49 (vs 50 as heavy)
+            },
+            new Parcel
+            {
+                Length = 120,
+                Width = 40,
+                Height = 10,
+                Weight = 23, // Cheaper as heavy - Total cost for this parcel will be 50 (vs 25 + 26 = 51 as XL)
+            },
+            new Parcel
+            {
+                Length = 120,
+                Width = 40,
+                Height = 10,
+                Weight = 57, // Definitely cheaper as heavy - Total cost for this parcel will be 57
+            },
+        };
+
+        var result = CostCalculator.CalculateOrderCost(parcels);
+
+        Assert.NotNull(result);
+        Assert.Equal(3, result.Items.Count);
+        Assert.Equal(156, result.TotalCost); // Total cost is 49 + 50 + 57 = 156
+        Assert.Equal(0, result.Items.Count(p => p.Type == ItemType.SmallParcel));
+        Assert.Equal(0, result.Items.Count(p => p.Type == ItemType.MediumParcel));
+        Assert.Equal(0, result.Items.Count(p => p.Type == ItemType.LargeParcel));
+        Assert.Equal(1, result.Items.Count(p => p.Type == ItemType.XLParcel));
+        Assert.Equal(2, result.Items.Count(p => p.Type == ItemType.HeavyParcel));
+        Assert.Equal(0, result.Items.Count(p => p.Type == ItemType.SpeedyShipping));
+    }
+
+    [Fact]
     public void CalculateOrderCost_EmptyList_ReturnsEmptySummary()
     {
         var parcels = new List<IParcel>();

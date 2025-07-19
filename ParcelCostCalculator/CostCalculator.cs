@@ -8,7 +8,7 @@ public class CostCalculator
 {
     /// <summary>
     /// Calculates the total cost and items for a list of parcels, returning an order summary.
-    /// Each parcel is evaluated for its type and cost based on its dimensions.
+    /// Each parcel is evaluated for its type and cost based on its dimensions and weight.
     /// Parcel dimensions should be specified in centimeters (cm), and weight in kilograms (kg).
     /// If `useSpeedyShipping` is true, a speedy shipping item is added to the items in the order summary.
     /// Speedy shipping doubles the cost of the order.
